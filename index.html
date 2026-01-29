@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developmental PE Quick Reference Guide</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            .max-w-7xl { max-width: 100%; }
+            button { display: none !important; }
+            .bg-gray-50 { background: white; }
+            .fixed { display: none !important; }
+        }
+        body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useMemo, useEffect } = React;
+        const { 
+            Search, Book, Heart, Brain, Dumbbell, Users, Target, Bookmark, 
+            Printer, ChevronDown, ChevronUp, StickyNote, Plus, X, Edit2, Save, Trash2 
+        } = lucide;
+
+        const QuickReferenceGuide = () => {
+            const [activeTab, setActiveTab] = useState('overview');
+            const [searchQuery, setSearchQuery] = useState('');
+            const [expandedSections, setExpandedSections] = useState({});
+            const [bookmarkedItems, setBookmarkedItems] = useState([]);
+            const [stickyNotes, setStickyNotes] = useState([]);
+            const [showNotesPanel, setShowNotesPanel] = useState(false);
+            const [editingNote, setEditingNote] = useState(null);
+            const [newNoteContent, setNewNoteContent] = useState('');
+            const [newNoteColor, setNewNoteColor] = useState('yellow');
+
+            useEffect(() => {
+                const savedNotes = localStorage.getItem('peQuickRefNotes');
+                if (savedNotes) {
+                    setStickyNotes(JSON.parse(savedNotes));
+                }
+            }, []);
+
+            useEffect(() => {
+                localStorage.setItem('peQuickRefNotes', JSON.stringify(stickyNotes));
+            }, [stickyNotes]);
+
+            const toggleSection = (sectionId) => {
+                setExpandedSections(prev => ({
+                    ...prev,
+                    [sectionId]: !prev[sectionId]
+                }));
+            };
+
+            const toggleBookmark = (itemId) => {
+                setBookmarkedItems(prev => 
+                    prev.includes(itemId) 
+                        ? prev.filter(id => id !== itemId)
+                        : [...prev, itemId]
+                );
+            };
+
+            const addStickyNote = (sectionId, sectionTitle) => {
+                if (!newNoteContent.trim()) return;
+                
+                const newNote = {
+                    id: Date.now(),
+                    sectionId,
+                    sectionTitle,
+                    content: newNoteContent,
+                    color: newNoteColor,
+                    tab: activeTab,
+                    createdAt: new Date().toISOString()
+                };
+                
+                setStickyNotes(prev => [...prev, newNote]);
+                setNewNoteContent('');
+                setNewNoteColor('yellow');
+            };
+
+            const deleteNote = (noteId) => {
+                setStickyNotes(prev => prev.filter(note => note.id !== noteId));
+            };
+
+            const startEditNote = (note) => {
+                setEditingNote(note.id);
+                setNewNoteContent(note.content);
+                setNewNoteColor(note.color);
+            };
+
+            const saveEditNote = (noteId) => {
+                setStickyNotes(prev => prev.map(note => 
+                    note.id === noteId 
+                        ? { ...note, content: newNoteContent, color: newNoteColor }
+                        : note
+                ));
+                setEditingNote(null);
+                setNewNoteContent('');
+                setNewNoteColor('yellow');
+            };
+
+            const cancelEdit = () => {
+                setEditingNote(null);
+                setNewNoteContent('');
+                setNewNoteColor('yellow');
+            };
+
+            const getNotesBySection = (sectionId) => {
+                return stickyNotes.filter(note => note.sectionId === sectionId);
+            };
+
+            const colorOptions = [
+                { name: 'yellow', bg: 'bg-yellow-100', border: 'border-yellow-300', text: 'text-yellow-900' },
+                { name: 'pink', bg: 'bg-pink-100', border: 'border-pink-300', text: 'text-pink-900' },
+                { name: 'blue', bg: 'bg-blue-100', border: 'border-blue-300', text: 'text-blue-900' },
+                { name: 'green', bg: 'bg-green-100', border: 'border-green-300', text: 'text-green-900' },
+                { name: 'purple', bg: 'bg-purple-100', border: 'border-purple-300', text: 'text-purple-900' },
+            ];
+
+            const getColorClasses = (colorName) => {
+                return colorOptions.find(c => c.name === colorName) || colorOptions[0];
+            };
+
+            const tabs = [
+                { id: 'overview', label: 'Overview', icon: Book },
+                { id: 'chapter1', label: 'Ch 1: QPE', icon: Target },
+                { id: 'chapter2', label: 'Ch 2: Healthy Child', icon: Dumbbell },
+                { id: 'chapter3', label: 'Ch 3: Thinking/Feeling', icon: Brain },
+                { id: 'chapter4', label: 'Ch 4: Moving Child', icon: Users },
+            ];
+
+            const StickyNoteCard = ({ note, isCompact = false }) => {
+                const colors = getColorClasses(note.color);
+                const isEditing = editingNote === note.id;
+                const Icon = lucide.StickyNote;
+                const EditIcon = lucide.Edit2;
+                const TrashIcon = lucide.Trash2;
+                const SaveIcon = lucide.Save;
+
+                return React.createElement('div', { 
+                    className: `${colors.bg} ${colors.border} border-2 rounded-lg p-3 shadow-md transform hover:scale-102 transition-transform` 
+                },
+                    isEditing ? (
+                        React.createElement('div', { className: 'space-y-2' },
+                            React.createElement('textarea', {
+                                value: newNoteContent,
+                                onChange: (e) => setNewNoteContent(e.target.value),
+                                className: `w-full p-2 ${colors.bg} border ${colors.border} rounded text-sm resize-none`,
+                                rows: 3,
+                                autoFocus: true
+                            }),
+                            React.createElement('div', { className: 'flex gap-1 mb-2' },
+                                colorOptions.map(color =>
+                                    React.createElement('button', {
+                                        key: color.name,
+                                        onClick: () => setNewNoteColor(color.name),
+                                        className: `w-6 h-6 rounded ${color.bg} ${color.border} border-2 ${
+                                            newNoteColor === color.name ? 'ring-2 ring-gray-500' : ''
+                                        }`
+                                    })
+                                )
+                            ),
+                            React.createElement('div', { className: 'flex gap-2' },
+                                React.createElement('button', {
+                                    onClick: () => saveEditNote(note.id),
+                                    className: 'flex items-center gap-1 px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700'
+                                },
+                                    React.createElement(SaveIcon, { size: 12 }),
+                                    ' Save'
+                                ),
+                                React.createElement('button', {
+                                    onClick: cancelEdit,
+                                    className: 'px-2 py-1 bg-gray-400 text-white rounded text-xs hover:bg-gray-500'
+                                }, 'Cancel')
+                            )
+                        )
+                    ) : (
+                        React.createElement(React.Fragment, null,
+                            React.createElement('div', { className: 'flex items-start justify-between mb-2' },
+                                React.createElement('div', { className: 'flex items-center gap-1' },
+                                    React.createElement(Icon, { size: 14, className: colors.text }),
+                                    !isCompact && React.createElement('span', { 
+                                        className: `text-xs font-semibold ${colors.text}` 
+                                    }, note.sectionTitle)
+                                ),
+                                React.createElement('div', { className: 'flex gap-1' },
+                                    React.createElement('button', {
+                                        onClick: () => startEditNote(note),
+                                        className: `p-1 ${colors.text} hover:bg-white rounded transition-colors`
+                                    }, React.createElement(EditIcon, { size: 12 })),
+                                    React.createElement('button', {
+                                        onClick: () => deleteNote(note.id),
+                                        className: `p-1 ${colors.text} hover:bg-white rounded transition-colors`
+                                    }, React.createElement(TrashIcon, { size: 12 }))
+                                )
+                            ),
+                            React.createElement('p', { 
+                                className: `text-sm ${colors.text} whitespace-pre-wrap` 
+                            }, note.content),
+                            !isCompact && React.createElement('p', { 
+                                className: 'text-xs text-gray-500 mt-2' 
+                            }, new Date(note.createdAt).toLocaleDateString())
+                        )
+                    )
+                );
+            };
+
+            const StickyNotesPanel = () => {
+                const notesByTab = useMemo(() => {
+                    return tabs.reduce((acc, tab) => {
+                        acc[tab.id] = stickyNotes.filter(note => note.tab === tab.id);
+                        return acc;
+                    }, {});
+                }, [stickyNotes]);
+
+                const Icon = lucide.StickyNote;
+                const XIcon = lucide.X;
+
+                return React.createElement('div', {
+                    className: `fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform transition-transform duration-300 z-50 ${
+                        showNotesPanel ? 'translate-x-0' : 'translate-x-full'
+                    }`
+                },
+                    React.createElement('div', { className: 'h-full flex flex-col' },
+                        React.createElement('div', { className: 'bg-gradient-to-r from-yellow-400 to-orange-400 p-4 flex items-center justify-between' },
+                            React.createElement('div', { className: 'flex items-center gap-2 text-white' },
+                                React.createElement(Icon, { size: 24 }),
+                                React.createElement('div', null,
+                                    React.createElement('h3', { className: 'font-bold text-lg' }, 'My Sticky Notes'),
+                                    React.createElement('p', { className: 'text-xs opacity-90' }, `${stickyNotes.length} total notes`)
+                                )
+                            ),
+                            React.createElement('button', {
+                                onClick: () => setShowNotesPanel(false),
+                                className: 'text-white hover:bg-white hover:bg-opacity-20 p-2 rounded transition-colors'
+                            }, React.createElement(XIcon, { size: 20 }))
+                        ),
+                        React.createElement('div', { className: 'flex-1 overflow-y-auto p-4 space-y-4' },
+                            stickyNotes.length === 0 ? (
+                                React.createElement('div', { className: 'text-center py-12 text-gray-400' },
+                                    React.createElement(Icon, { size: 48, className: 'mx-auto mb-3 opacity-50' }),
+                                    React.createElement('p', { className: 'text-sm' }, 'No notes yet!'),
+                                    React.createElement('p', { className: 'text-xs mt-1' }, 'Add notes to sections using the + button')
+                                )
+                            ) : (
+                                tabs.map(tab => {
+                                    const tabNotes = notesByTab[tab.id] || [];
+                                    if (tabNotes.length === 0) return null;
+                                    
+                                    return React.createElement('div', { key: tab.id },
+                                        React.createElement('div', { className: 'flex items-center gap-2 mb-3' },
+                                            React.createElement(tab.icon, { size: 16, className: 'text-gray-600' }),
+                                            React.createElement('h4', { className: 'font-semibold text-gray-700' }, tab.label),
+                                            React.createElement('span', { className: 'text-xs text-gray-500' }, `(${tabNotes.length})`)
+                                        ),
+                                        React.createElement('div', { className: 'space-y-3' },
+                                            tabNotes.map(note => React.createElement(StickyNoteCard, { key: note.id, note }))
+                                        )
+                                    );
+                                })
+                            )
+                        ),
+                        React.createElement('div', { className: 'border-t p-4 bg-gray-50' },
+                            React.createElement('button', {
+                                onClick: () => {
+                                    if (window.confirm('Are you sure you want to delete ALL notes? This cannot be undone.')) {
+                                        setStickyNotes([]);
+                                    }
+                                },
+                                disabled: stickyNotes.length === 0,
+                                className: 'w-full px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors'
+                            }, 'Clear All Notes')
+                        )
+                    )
+                );
+            };
+
+            const CollapsibleSection = ({ id, title, children, defaultOpen = false }) => {
+                const isExpanded = expandedSections[id] !== undefined ? expandedSections[id] : defaultOpen;
+                const isBookmarked = bookmarkedItems.includes(id);
+                const sectionNotes = getNotesBySection(id);
+                const [showNoteForm, setShowNoteForm] = useState(false);
+
+                const Icon = lucide.StickyNote;
+                const PlusIcon = lucide.Plus;
+                const BookmarkIcon = lucide.Bookmark;
+                const ChevronUpIcon = lucide.ChevronUp;
+                const ChevronDownIcon = lucide.ChevronDown;
+                
+                return React.createElement('div', { className: 'mb-4 border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm' },
+                    React.createElement('div', {
+                        className: 'flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors',
+                        onClick: () => toggleSection(id)
+                    },
+                        React.createElement('h3', { className: 'font-semibold text-gray-800 flex items-center gap-2' },
+                            title,
+                            sectionNotes.length > 0 && React.createElement('span', { 
+                                className: 'inline-flex items-center gap-1 px-2 py-0.5 bg-yellow-200 text-yellow-800 rounded-full text-xs' 
+                            },
+                                React.createElement(Icon, { size: 12 }),
+                                sectionNotes.length
+                            )
+                        ),
+                        React.createElement('div', { className: 'flex items-center gap-2' },
+                            React.createElement('button', {
+                                onClick: (e) => {
+                                    e.stopPropagation();
+                                    setShowNoteForm(!showNoteForm);
+                                },
+                                className: 'p-1 hover:bg-white rounded transition-colors text-orange-500',
+                                title: 'Add sticky note'
+                            }, React.createElement(PlusIcon, { size: 18 })),
+                            React.createElement('button', {
+                                onClick: (e) => {
+                                    e.stopPropagation();
+                                    toggleBookmark(id);
+                                },
+                                className: 'p-1 hover:bg-white rounded transition-colors',
+                                title: 'Bookmark section'
+                            }, React.createElement(BookmarkIcon, { 
+                                size: 18,
+                                className: isBookmarked ? "fill-yellow-400 text-yellow-500" : "text-gray-400"
+                            })),
+                            isExpanded ? React.createElement(ChevronUpIcon, { size: 20 }) : React.createElement(ChevronDownIcon, { size: 20 })
+                        )
+                    ),
+                    showNoteForm && React.createElement('div', { className: 'p-4 bg-yellow-50 border-b border-yellow-200' },
+                        React.createElement('h4', { className: 'text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2' },
+                            React.createElement(Icon, { size: 16, className: 'text-yellow-600' }),
+                            'Add a note to this section'
+                        ),
+                        React.createElement('textarea', {
+                            value: newNoteContent,
+                            onChange: (e) => setNewNoteContent(e.target.value),
+                            placeholder: 'Type your note here...',
+                            className: 'w-full p-2 border border-yellow-300 rounded text-sm resize-none mb-2',
+                            rows: 3
+                        }),
+                        React.createElement('div', { className: 'flex items-center gap-2 mb-3' },
+                            React.createElement('span', { className: 'text-xs text-gray-600' }, 'Color:'),
+                            colorOptions.map(color =>
+                                React.createElement('button', {
+                                    key: color.name,
+                                    onClick: () => setNewNoteColor(color.name),
+                                    className: `w-8 h-8 rounded ${color.bg} ${color.border} border-2 hover:scale-110 transition-transform ${
+                                        newNoteColor === color.name ? 'ring-2 ring-gray-500 scale-110' : ''
+                                    }`,
+                                    title: color.name
+                                })
+                            )
+                        ),
+                        React.createElement('div', { className: 'flex gap-2' },
+                            React.createElement('button', {
+                                onClick: () => {
+                                    addStickyNote(id, title);
+                                    setShowNoteForm(false);
+                                },
+                                disabled: !newNoteContent.trim(),
+                                className: 'flex items-center gap-1 px-3 py-1.5 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+                            },
+                                React.createElement(PlusIcon, { size: 14 }),
+                                ' Add Note'
+                            ),
+                            React.createElement('button', {
+                                onClick: () => {
+                                    setShowNoteForm(false);
+                                    setNewNoteContent('');
+                                    setNewNoteColor('yellow');
+                                },
+                                className: 'px-3 py-1.5 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400 transition-colors'
+                            }, 'Cancel')
+                        )
+                    ),
+                    isExpanded && sectionNotes.length > 0 && React.createElement('div', { className: 'p-4 bg-gray-50 border-b border-gray-200' },
+                        React.createElement('h4', { className: 'text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2' },
+                            React.createElement(Icon, { size: 16, className: 'text-gray-600' }),
+                            'Your notes for this section:'
+                        ),
+                        React.createElement('div', { className: 'grid gap-3' },
+                            sectionNotes.map(note => React.createElement(StickyNoteCard, { key: note.id, note, isCompact: true }))
+                        )
+                    ),
+                    isExpanded && React.createElement('div', { className: 'p-4 bg-white' }, children)
+                );
+            };
+
+            // Simplified content rendering - just showing structure
+            const renderOverview = () => {
+                return React.createElement('div', { className: 'space-y-6' },
+                    React.createElement('div', { className: 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-lg shadow-lg' },
+                        React.createElement('h2', { className: 'text-2xl font-bold mb-3' }, '📘 Quick Reference Guide'),
+                        React.createElement('p', { className: 'text-lg mb-2' }, 'Developmental PE for ALL Children (Chapters 1-4)'),
+                        React.createElement('p', { className: 'text-sm opacity-90' }, 'Keep this guide open while completing your Meaningful PE Analysis')
+                    ),
+                    React.createElement('div', { className: 'bg-blue-50 border-l-4 border-blue-500 p-4 rounded' },
+                        React.createElement('h3', { className: 'font-bold text-blue-900 mb-2' }, '🎯 How to Use This Guide'),
+                        React.createElement('ul', { className: 'text-sm text-blue-800 space-y-1' },
+                            React.createElement('li', null, '• Click tabs above to navigate between chapters'),
+                            React.createElement('li', null, '• Use the search bar to find specific concepts'),
+                            React.createElement('li', null, '• Bookmark important sections with the bookmark icon'),
+                            React.createElement('li', null, '• Add sticky notes to sections with the + icon'),
+                            React.createElement('li', null, '• View all your notes using the sticky note button (top right)')
+                        )
+                    ),
+                    React.createElement(CollapsibleSection, { 
+                        id: 'citation-tips', 
+                        title: '📖 Citation Reminders',
+                        defaultOpen: true 
+                    },
+                        React.createElement('div', { className: 'space-y-3' },
+                            React.createElement('div', { className: 'bg-gray-50 p-3 rounded' },
+                                React.createElement('p', { className: 'font-semibold mb-2' }, 'Format Options:'),
+                                React.createElement('code', { className: 'block bg-white p-2 rounded mb-1' }, '(Chapter #, p. XX)'),
+                                React.createElement('code', { className: 'block bg-white p-2 rounded' }, '(Author et al., "Chapter Title," p. XX)')
+                            )
+                        )
+                    )
+                );
+            };
+
+            const handlePrint = () => window.print();
+
+            const SearchIcon = lucide.Search;
+            const BookIcon = lucide.Book;
+            const PrinterIcon = lucide.Printer;
+            const NoteIcon = lucide.StickyNote;
+            const BookmarkIcon = lucide.Bookmark;
+
+            return React.createElement('div', { className: 'max-w-7xl mx-auto p-4 bg-gray-50 min-h-screen' },
+                React.createElement(StickyNotesPanel),
+                showNotesPanel && React.createElement('div', {
+                    className: 'fixed inset-0 bg-black bg-opacity-30 z-40',
+                    onClick: () => setShowNotesPanel(false)
+                }),
+                React.createElement('div', { className: 'mb-6 bg-white rounded-lg shadow-md p-4' },
+                    React.createElement('div', { className: 'flex items-center justify-between mb-4' },
+                        React.createElement('div', { className: 'flex items-center gap-3' },
+                            React.createElement(BookIcon, { className: 'text-indigo-600', size: 32 }),
+                            React.createElement('div', null,
+                                React.createElement('h1', { className: 'text-2xl font-bold text-gray-800' }, 'Developmental PE Quick Reference'),
+                                React.createElement('p', { className: 'text-sm text-gray-600' }, 'Interactive guide for your Meaningful PE Analysis')
+                            )
+                        ),
+                        React.createElement('div', { className: 'flex gap-2' },
+                            React.createElement('button', {
+                                onClick: () => setShowNotesPanel(true),
+                                className: 'flex items-center gap-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 rounded-lg transition-colors relative'
+                            },
+                                React.createElement(NoteIcon, { size: 20 }),
+                                React.createElement('span', { className: 'hidden md:inline font-medium' }, 'My Notes'),
+                                stickyNotes.length > 0 && React.createElement('span', {
+                                    className: 'absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center'
+                                }, stickyNotes.length)
+                            ),
+                            React.createElement('button', {
+                                onClick: handlePrint,
+                                className: 'flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors'
+                            },
+                                React.createElement(PrinterIcon, { size: 20 }),
+                                React.createElement('span', { className: 'hidden md:inline' }, 'Print')
+                            )
+                        )
+                    ),
+                    React.createElement('div', { className: 'relative' },
+                        React.createElement(SearchIcon, { 
+                            className: 'absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400',
+                            size: 20
+                        }),
+                        React.createElement('input', {
+                            type: 'text',
+                            placeholder: 'Search concepts, terms, or chapters...',
+                            value: searchQuery,
+                            onChange: (e) => setSearchQuery(e.target.value),
+                            className: 'w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                        })
+                    ),
+                    bookmarkedItems.length > 0 && React.createElement('div', { className: 'mt-3 p-3 bg-yellow-50 rounded border border-yellow-200' },
+                        React.createElement('div', { className: 'flex items-center gap-2 mb-2' },
+                            React.createElement(BookmarkIcon, { size: 16, className: 'fill-yellow-400 text-yellow-500' }),
+                            React.createElement('p', { className: 'text-sm font-semibold text-yellow-900' }, `Your Bookmarks (${bookmarkedItems.length})`)
+                        )
+                    )
+                ),
+                React.createElement('div', { className: 'mb-6 bg-white rounded-lg shadow-md overflow-hidden' },
+                    React.createElement('div', { className: 'flex overflow-x-auto' },
+                        tabs.map(tab => {
+                            const Icon = tab.icon;
+                            const tabNotes = stickyNotes.filter(note => note.tab === tab.id);
+                            return React.createElement('button', {
+                                key: tab.id,
+                                onClick: () => setActiveTab(tab.id),
+                                className: `flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors relative ${
+                                    activeTab === tab.id
+                                        ? 'bg-indigo-600 text-white border-b-4 border-indigo-800'
+                                        : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                                }`
+                            },
+                                React.createElement(Icon, { size: 18 }),
+                                React.createElement('span', { className: 'font-medium text-sm' }, tab.label),
+                                tabNotes.length > 0 && React.createElement('span', {
+                                    className: `text-xs px-1.5 py-0.5 rounded-full ${
+                                        activeTab === tab.id 
+                                            ? 'bg-white text-indigo-600' 
+                                            : 'bg-yellow-200 text-yellow-800'
+                                    }`
+                                }, tabNotes.length)
+                            );
+                        })
+                    )
+                ),
+                React.createElement('div', { className: 'bg-white rounded-lg shadow-md p-6' },
+                    renderOverview()
+                ),
+                React.createElement('div', { className: 'mt-6 text-center text-sm text-gray-600' },
+                    React.createElement('p', { className: 'flex items-center justify-center gap-2' },
+                        '💡 Tip: Add sticky notes to sections and use the search bar to find concepts quickly!'
+                    ),
+                    React.createElement('p', { className: 'mt-2' }, 'Keep this guide open while working on your Meaningful PE Analysis ✨')
+                )
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(QuickReferenceGuide));
+    </script>
+</body>
+</html>
