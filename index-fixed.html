@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developmental PE Quick Reference Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            .max-w-7xl { max-width: 100%; }
+            .bg-gray-50 { background: white; }
+        }
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .collapsible-content.active {
+            max-height: 5000px;
+            transition: max-height 0.5s ease-in;
+        }
+        .sticky-note {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="app" class="max-w-7xl mx-auto p-4 min-h-screen">
+        <!-- Header -->
+        <div class="mb-6 bg-white rounded-lg shadow-md p-4">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <svg class="text-indigo-600" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">Developmental PE Quick Reference</h1>
+                        <p class="text-sm text-gray-600">Interactive guide for your Meaningful PE Analysis</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="toggleNotesPanel()" class="no-print flex items-center gap-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 rounded-lg transition-colors relative font-medium">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                        </svg>
+                        <span class="hidden md:inline">My Notes</span>
+                        <span id="notesCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 items-center justify-center hidden">0</span>
+                    </button>
+                    <button onclick="window.print()" class="no-print flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                            <rect x="6" y="14" width="12" height="8"></rect>
+                        </svg>
+                        <span class="hidden md:inline">Print</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative">
+                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    placeholder="Search concepts, terms, or chapters..."
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    onkeyup="handleSearch()"
+                >
+            </div>
+            <div id="searchResults" class="mt-3 hidden"></div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="mb-6 bg-white rounded-lg shadow-md overflow-hidden no-print">
+            <div class="flex overflow-x-auto">
+                <button onclick="switchTab('overview')" class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors bg-indigo-600 text-white border-b-4 border-indigo-800" data-tab="overview">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <span class="font-medium text-sm">Overview</span>
+                </button>
+                <button onclick="switchTab('chapter1')" class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors bg-gray-50 text-gray-700 hover:bg-gray-100" data-tab="chapter1">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="6"></circle>
+                        <circle cx="12" cy="12" r="2"></circle>
+                    </svg>
+                    <span class="font-medium text-sm">Ch 1: QPE</span>
+                </button>
+                <button onclick="switchTab('chapter2')" class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors bg-gray-50 text-gray-700 hover:bg-gray-100" data-tab="chapter2">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span class="font-medium text-sm">Ch 2: Healthy Child</span>
+                </button>
+                <button onclick="switchTab('chapter3')" class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors bg-gray-50 text-gray-700 hover:bg-gray-100" data-tab="chapter3">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <path d="M12 17h.01"></path>
+                    </svg>
+                    <span class="font-medium text-sm">Ch 3: Thinking/Feeling</span>
+                </button>
+                <button onclick="switchTab('chapter4')" class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors bg-gray-50 text-gray-700 hover:bg-gray-100" data-tab="chapter4">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <line x1="19" y1="8" x2="19" y2="14"></line>
+                        <line x1="22" y1="11" x2="16" y2="11"></line>
+                    </svg>
+                    <span class="font-medium text-sm">Ch 4: Moving Child</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Areas -->
+        <div id="content" class="bg-white rounded-lg shadow-md p-6">
+            <!-- Overview Content -->
+            <div id="tab-overview" class="tab-content">
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-lg shadow-lg">
+                        <h2 class="text-2xl font-bold mb-3">📘 Quick Reference Guide</h2>
+                        <p class="text-lg mb-2">Developmental PE for ALL Children (Chapters 1-4)</p>
+                        <p class="text-sm opacity-90">Keep this guide open while completing your Meaningful PE Analysis</p>
+                    </div>
+
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                        <h3 class="font-bold text-blue-900 mb-2">🎯 How to Use This Guide</h3>
+                        <ul class="text-sm text-blue-800 space-y-1">
+                            <li>• Click tabs above to navigate between chapters</li>
+                            <li>• Click section headers to expand/collapse content</li>
+                            <li>• Use the search bar to find specific concepts</li>
+                            <li>• Add sticky notes to sections with the + button</li>
+                            <li>• View all your notes using the "My Notes" button (top right)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+                        <h3 class="font-bold text-yellow-900 mb-2 flex items-center gap-2">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                                <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                            </svg>
+                            Sticky Notes Feature
+                        </h3>
+                        <p class="text-sm text-yellow-800 mb-2">
+                            As you work through your analysis, add sticky notes to remind yourself of:
+                        </p>
+                        <ul class="text-sm text-yellow-800 space-y-1 ml-4">
+                            <li>• Connections you want to make in your table</li>
+                            <li>• Important quotes to cite</li>
+                            <li>• Questions to ask your professor</li>
+                            <li>• Ideas for redesigning lesson components</li>
+                        </ul>
+                        <p class="text-xs text-yellow-700 mt-3 italic">
+                            💡 Your notes are automatically saved and will be here when you come back!
+                        </p>
+                    </div>
+
+                    <!-- Citation Tips Section -->
+                    <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                        <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('citation-tips')">
+                            <h3 class="font-semibold text-gray-800">📖 Citation Reminders</h3>
+                            <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div id="section-citation-tips" class="collapsible-content">
+                            <div class="p-4">
+                                <div class="space-y-3">
+                                    <div class="bg-gray-50 p-3 rounded">
+                                        <p class="font-semibold mb-2">Format Options:</p>
+                                        <code class="block bg-white p-2 rounded mb-1">(Chapter #, p. XX)</code>
+                                        <code class="block bg-white p-2 rounded">(Author et al., "Chapter Title," p. XX)</code>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded">
+                                        <p class="font-semibold mb-2">Examples:</p>
+                                        <code class="block bg-white p-2 rounded mb-1">(Ch. 3, p. 28)</code>
+                                        <code class="block bg-white p-2 rounded">(Gallahue et al., "The Moving Child," p. 42)</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Tips Section -->
+                    <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                        <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('quick-tips')">
+                            <h3 class="font-semibold text-gray-800">🎯 Quick Analysis Tips</h3>
+                            <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div id="section-quick-tips" class="collapsible-content">
+                            <div class="p-4">
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-purple-50 p-3 rounded">
+                                        <h4 class="font-bold text-purple-900 mb-2">When analyzing MOTOR COMPETENCE:</h4>
+                                        <ul class="text-sm text-purple-800 space-y-1">
+                                            <li>• What stage of motor development?</li>
+                                            <li>• What level of motor learning required?</li>
+                                            <li>• Are perceptual-motor abilities considered?</li>
+                                            <li>• Is there adequate practice time?</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-green-50 p-3 rounded">
+                                        <h4 class="font-bold text-green-900 mb-2">When analyzing SOCIAL INTERACTION:</h4>
+                                        <ul class="text-sm text-green-800 space-y-1">
+                                            <li>• What peer interaction opportunities?</li>
+                                            <li>• Are social skills explicitly taught?</li>
+                                            <li>• What TPSR level is targeted?</li>
+                                            <li>• Is self-concept protected or threatened?</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter tabs would go here - simplified for now -->
+            <div id="tab-chapter1" class="tab-content hidden">
+                <div class="bg-gradient-to-r from-blue-500 to-cyan-600 text-white p-4 rounded-lg mb-4">
+                    <h2 class="text-xl font-bold">Chapter 1: Quality Developmental Physical Education</h2>
+                </div>
+                <p class="text-gray-600">Content for Chapter 1 goes here...</p>
+            </div>
+
+            <div id="tab-chapter2" class="tab-content hidden">
+                <div class="bg-gradient-to-r from-red-500 to-pink-600 text-white p-4 rounded-lg mb-4">
+                    <h2 class="text-xl font-bold">Chapter 2: The Healthy Child</h2>
+                </div>
+                <p class="text-gray-600">Content for Chapter 2 goes here...</p>
+            </div>
+
+            <div id="tab-chapter3" class="tab-content hidden">
+                <div class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white p-4 rounded-lg mb-4">
+                    <h2 class="text-xl font-bold">Chapter 3: The Thinking, Feeling, and Socializing Child</h2>
+                </div>
+                <p class="text-gray-600">Content for Chapter 3 goes here...</p>
+            </div>
+
+            <div id="tab-chapter4" class="tab-content hidden">
+                <div class="bg-gradient-to-r from-green-500 to-teal-600 text-white p-4 rounded-lg mb-4">
+                    <h2 class="text-xl font-bold">Chapter 4: The Moving Child</h2>
+                </div>
+                <p class="text-gray-600">Content for Chapter 4 goes here...</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-6 text-center text-sm text-gray-600">
+            <p>💡 Tip: Add sticky notes to sections and use the search bar to find concepts quickly!</p>
+            <p class="mt-2">Keep this guide open while working on your Meaningful PE Analysis ✨</p>
+        </div>
+    </div>
+
+    <!-- Notes Panel (Sidebar) -->
+    <div id="notesPanel" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 no-print">
+        <div class="h-full flex flex-col">
+            <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 flex items-center justify-between">
+                <div class="flex items-center gap-2 text-white">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                        <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                    </svg>
+                    <div>
+                        <h3 class="font-bold text-lg">My Sticky Notes</h3>
+                        <p class="text-xs opacity-90"><span id="totalNotes">0</span> total notes</p>
+                    </div>
+                </div>
+                <button onclick="toggleNotesPanel()" class="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded transition-colors">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div id="notesContent" class="flex-1 overflow-y-auto p-4">
+                <div class="text-center py-12 text-gray-400">
+                    <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" class="mx-auto mb-3 opacity-50">
+                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                        <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                    </svg>
+                    <p class="text-sm">No notes yet!</p>
+                    <p class="text-xs mt-1">Add notes to sections using the + button</p>
+                </div>
+            </div>
+            <div class="border-t p-4 bg-gray-50">
+                <button onclick="clearAllNotes()" class="w-full px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 text-sm font-medium transition-colors">
+                    Clear All Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-30 z-40 hidden no-print" onclick="toggleNotesPanel()"></div>
+
+    <script>
+        // Initialize
+        let notes = JSON.parse(localStorage.getItem('peNotes') || '[]');
+        updateNotesDisplay();
+
+        // Tab Switching
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Show selected tab
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+            
+            // Update tab button styles
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'border-b-4', 'border-indigo-800');
+                btn.classList.add('bg-gray-50', 'text-gray-700', 'hover:bg-gray-100');
+            });
+            document.querySelector('[data-tab="' + tabName + '"]').classList.remove('bg-gray-50', 'text-gray-700', 'hover:bg-gray-100');
+            document.querySelector('[data-tab="' + tabName + '"]').classList.add('bg-indigo-600', 'text-white', 'border-b-4', 'border-indigo-800');
+        }
+
+        // Section Toggle
+        function toggleSection(sectionId) {
+            const section = document.getElementById('section-' + sectionId);
+            section.classList.toggle('active');
+        }
+
+        // Notes Panel
+        function toggleNotesPanel() {
+            const panel = document.getElementById('notesPanel');
+            const overlay = document.getElementById('overlay');
+            const isOpen = !panel.classList.contains('translate-x-full');
+            
+            if (isOpen) {
+                panel.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                panel.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        // Update Notes Display
+        function updateNotesDisplay() {
+            const count = notes.length;
+            document.getElementById('totalNotes').textContent = count;
+            const badge = document.getElementById('notesCount');
+            if (count > 0) {
+                badge.textContent = count;
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            // Update notes panel content
+            const content = document.getElementById('notesContent');
+            if (count === 0) {
+                content.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" class="mx-auto mb-3 opacity-50">
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                        </svg>
+                        <p class="text-sm">No notes yet!</p>
+                        <p class="text-xs mt-1">Add notes to sections using the + button</p>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = notes.map((note, idx) => `
+                    <div class="sticky-note bg-${note.color}-100 border-2 border-${note.color}-300 rounded-lg p-3 mb-3">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-semibold text-${note.color}-900">${note.section}</span>
+                            <button onclick="deleteNote(${idx})" class="text-${note.color}-700 hover:text-${note.color}-900">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-sm text-${note.color}-900">${note.content}</p>
+                        <p class="text-xs text-gray-500 mt-2">${new Date(note.created).toLocaleDateString()}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Add Note (simplified - you can expand this)
+        function addNote(section, content, color = 'yellow') {
+            notes.push({
+                section: section,
+                content: content,
+                color: color,
+                created: new Date().toISOString()
+            });
+            localStorage.setItem('peNotes', JSON.stringify(notes));
+            updateNotesDisplay();
+        }
+
+        // Delete Note
+        function deleteNote(index) {
+            if (confirm('Delete this note?')) {
+                notes.splice(index, 1);
+                localStorage.setItem('peNotes', JSON.stringify(notes));
+                updateNotesDisplay();
+            }
+        }
+
+        // Clear All Notes
+        function clearAllNotes() {
+            if (confirm('Are you sure you want to delete ALL notes? This cannot be undone.')) {
+                notes = [];
+                localStorage.setItem('peNotes', JSON.stringify(notes));
+                updateNotesDisplay();
+            }
+        }
+
+        // Search
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const results = document.getElementById('searchResults');
+            
+            if (query.length < 2) {
+                results.classList.add('hidden');
+                return;
+            }
+
+            let foundResults = [];
+            if (query.includes('motor') || query.includes('skill')) {
+                foundResults.push({tab: 'chapter4', text: 'Motor Development Stages'});
+            }
+            if (query.includes('fitness') || query.includes('health')) {
+                foundResults.push({tab: 'chapter2', text: 'Health-Related Fitness'});
+            }
+            if (query.includes('piaget') || query.includes('cognitive')) {
+                foundResults.push({tab: 'chapter3', text: 'Piaget Cognitive Development'});
+            }
+
+            if (foundResults.length > 0) {
+                results.innerHTML = `
+                    <div class="p-3 bg-yellow-50 rounded border border-yellow-200">
+                        <p class="text-sm font-semibold text-yellow-900 mb-2">Found ${foundResults.length} result(s):</p>
+                        ${foundResults.map(r => `
+                            <button onclick="switchTab('${r.tab}')" class="block w-full text-left text-sm text-yellow-800 hover:text-yellow-900 hover:underline">
+                                → ${r.text} (Click to jump)
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                results.classList.remove('hidden');
+            } else {
+                results.classList.add('hidden');
+            }
+        }
+
+        // Test note function for demonstration
+        console.log('Guide loaded successfully! Try: addNote("Citation Tips", "Remember to cite page numbers!", "pink")');
+    </script>
+</body>
+</html>
