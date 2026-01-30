@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developmental PE Quick Reference Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            .max-w-7xl { max-width: 100%; }
+            .bg-gray-50 { background: white; }
+        }
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .collapsible-content.active {
+            max-height: 10000px;
+            transition: max-height 0.8s ease-in;
+        }
+        .sticky-note {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f9fafb;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="app" class="max-w-7xl mx-auto p-4 min-h-screen">
+        <!-- Header -->
+        <div class="mb-6 bg-white rounded-lg shadow-md p-4">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <svg class="text-indigo-600" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">Developmental PE Quick Reference</h1>
+                        <p class="text-sm text-gray-600">Interactive guide for your Meaningful PE Analysis</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="toggleNotesPanel()" class="no-print flex items-center gap-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 rounded-lg transition-colors relative font-medium">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                        </svg>
+                        <span class="hidden md:inline">My Notes</span>
+                        <span id="notesCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 items-center justify-center hidden">0</span>
+                    </button>
+                    <button onclick="window.print()" class="no-print flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                            <rect x="6" y="14" width="12" height="8"></rect>
+                        </svg>
+                        <span class="hidden md:inline">Print</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative">
+                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    placeholder="Search concepts, terms, or chapters..."
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    onkeyup="handleSearch()"
+                >
+            </div>
+            <div id="searchResults" class="mt-3 hidden"></div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="mb-6 bg-white rounded-lg shadow-md overflow-hidden no-print">
+            <div class="flex overflow-x-auto">
+                <button onclick="switchTab('overview')" class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors bg-indigo-600 text-white border-b-4 border-indigo-800" data-tab="overview">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <span class="font-medium text-sm">Overview</span>
+                </button>
+                <button onclick="switchTab('chapter1')" class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors bg-gray-50 text-gray-700 hover:bg-gray-100" data-tab="chapter1">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="6"></circle>
+                        <circle cx="12" cy="12" r="2"></circle>
+                    </svg>
+                    <span class="font-medium text-sm">Ch 1: QPE</span>
+                </button>
+                <button onclick="switchTab('chapter2')" class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors bg-gray-50 text-gray-700 hover:bg-gray-100" data-tab="chapter2">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    <span class="font-medium text-sm">Ch 2: Healthy Child</span>
+                </button>
+                <button onclick="switchTab('chapter3')" class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors bg-gray-50 text-gray-700 hover:bg-gray-100" data-tab="chapter3">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <path d="M12 17h.01"></path>
+                    </svg>
+                    <span class="font-medium text-sm">Ch 3: Thinking/Feeling</span>
+                </button>
+                <button onclick="switchTab('chapter4')" class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors bg-gray-50 text-gray-700 hover:bg-gray-100" data-tab="chapter4">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <line x1="19" y1="8" x2="19" y2="14"></line>
+                        <line x1="22" y1="11" x2="16" y2="11"></line>
+                    </svg>
+                    <span class="font-medium text-sm">Ch 4: Moving Child</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Areas -->
+        <div id="content" class="bg-white rounded-lg shadow-md p-6">
+            
+            <!-- ============ OVERVIEW TAB ============ -->
+            <div id="tab-overview" class="tab-content space-y-6">
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-3">📘 Quick Reference Guide</h2>
+                    <p class="text-lg mb-2">Developmental PE for ALL Children (Chapters 1-4)</p>
+                    <p class="text-sm opacity-90">Keep this guide open while completing your Meaningful PE Analysis</p>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <h3 class="font-bold text-blue-900 mb-2">🎯 How to Use This Guide</h3>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• Click tabs above to navigate between chapters</li>
+                        <li>• Click section headers to expand/collapse content</li>
+                        <li>• Use the search bar to find specific concepts</li>
+                        <li>• Click "My Notes" button (top right) to view all your sticky notes</li>
+                        <li>• Print this guide using the printer icon</li>
+                    </ul>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+                    <h3 class="font-bold text-yellow-900 mb-2 flex items-center gap-2">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                        </svg>
+                        Sticky Notes Feature
+                    </h3>
+                    <p class="text-sm text-yellow-800 mb-2">
+                        Use the browser console to add sticky notes as you work:
+                    </p>
+                    <code class="block bg-yellow-100 p-2 rounded text-xs text-yellow-900 mb-2">
+                        addNote("Section Name", "Your note here", "pink")
+                    </code>
+                    <p class="text-xs text-yellow-700 italic">
+                        💡 Colors: yellow, pink, blue, green, purple
+                    </p>
+                </div>
+
+                <!-- Citation Tips -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('citation-tips')">
+                        <h3 class="font-semibold text-gray-800">📖 Citation Reminders</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-citation-tips" class="collapsible-content active">
+                        <div class="p-4 space-y-3">
+                            <div class="bg-gray-50 p-3 rounded">
+                                <p class="font-semibold mb-2">Format Options:</p>
+                                <code class="block bg-white p-2 rounded mb-1">(Chapter #, p. XX)</code>
+                                <code class="block bg-white p-2 rounded">(Author et al., "Chapter Title," p. XX)</code>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded">
+                                <p class="font-semibold mb-2">Examples:</p>
+                                <code class="block bg-white p-2 rounded mb-1">(Ch. 3, p. 28)</code>
+                                <code class="block bg-white p-2 rounded">(Gallahue et al., "The Moving Child," p. 42)</code>
+                            </div>
+                            <div class="bg-yellow-50 p-3 rounded border border-yellow-200">
+                                <p class="font-semibold text-yellow-900 mb-2">Use Direct Quotes When:</p>
+                                <ul class="text-sm text-yellow-800 space-y-1">
+                                    <li>✓ The textbook language is powerful/precise</li>
+                                    <li>✓ You want to ensure accuracy</li>
+                                    <li>✓ The phrase is particularly well-stated</li>
+                                </ul>
+                                <p class="text-xs text-yellow-800 mt-2 font-semibold">Always put quoted text in "quotation marks" and cite the page!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Analysis Tips -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('quick-tips')">
+                        <h3 class="font-semibold text-gray-800">🎯 Quick Analysis Tips</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-quick-tips" class="collapsible-content active">
+                        <div class="p-4">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-purple-50 p-3 rounded">
+                                    <h4 class="font-bold text-purple-900 mb-2">When analyzing MOTOR COMPETENCE:</h4>
+                                    <ul class="text-sm text-purple-800 space-y-1">
+                                        <li>• What stage of motor development?</li>
+                                        <li>• What level of motor learning required?</li>
+                                        <li>• Are perceptual-motor abilities considered?</li>
+                                        <li>• Is there adequate practice time?</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded">
+                                    <h4 class="font-bold text-green-900 mb-2">When analyzing SOCIAL INTERACTION:</h4>
+                                    <ul class="text-sm text-green-800 space-y-1">
+                                        <li>• What peer interaction opportunities?</li>
+                                        <li>• Are social skills explicitly taught?</li>
+                                        <li>• What TPSR level is targeted?</li>
+                                        <li>• Is self-concept protected or threatened?</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-orange-50 p-3 rounded">
+                                    <h4 class="font-bold text-orange-900 mb-2">When analyzing 'JUST RIGHT' CHALLENGE:</h4>
+                                    <ul class="text-sm text-orange-800 space-y-1">
+                                        <li>• Are tasks differentiated by skill level?</li>
+                                        <li>• Can all students succeed?</li>
+                                        <li>• Are affordances being used?</li>
+                                        <li>• Does challenge match cognitive stage?</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-red-50 p-3 rounded">
+                                    <h4 class="font-bold text-red-900 mb-2">When analyzing FITNESS:</h4>
+                                    <ul class="text-sm text-red-800 space-y-1">
+                                        <li>• Which HRF components addressed?</li>
+                                        <li>• Are FITT principles developmentally appropriate?</li>
+                                        <li>• Is fitness fun, nonthreatening, progressive?</li>
+                                        <li>• Are children learning concepts?</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ CHAPTER 1 TAB ============ -->
+            <div id="tab-chapter1" class="tab-content hidden space-y-4">
+                <div class="bg-gradient-to-r from-blue-500 to-cyan-600 text-white p-4 rounded-lg">
+                    <h2 class="text-xl font-bold">Chapter 1: Quality Developmental Physical Education</h2>
+                </div>
+
+                <!-- QPE Defined -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('qpe-defined')">
+                        <h3 class="font-semibold text-gray-800">Quality Physical Education (QPE) Defined</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-qpe-defined" class="collapsible-content active">
+                        <div class="p-4">
+                            <div class="bg-blue-50 p-4 rounded border-l-4 border-blue-500">
+                                <p class="font-semibold mb-2">QPE helps students increase their:</p>
+                                <ul class="space-y-1 ml-4">
+                                    <li>• Physical competence</li>
+                                    <li>• Health-related fitness</li>
+                                    <li>• Self-responsibility</li>
+                                    <li>• Enjoyment of physical activity</li>
+                                </ul>
+                                <p class="mt-3 text-sm italic">...so they can be active for a lifetime (p. 6)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appropriate Practices -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('appropriate-practices')">
+                        <h3 class="font-semibold text-gray-800">✅ Appropriate vs. ❌ Inappropriate Practices</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-appropriate-practices" class="collapsible-content">
+                        <div class="p-4">
+                            <div class="overflow-x-auto">
+                                <table class="text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>✅ Appropriate Practice</th>
+                                            <th>❌ Inappropriate Practice</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Standards-based lessons with clear objectives aligned to developmental status</td>
+                                            <td>Random activities not connected to standards or development</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Instant activities engage all students immediately</td>
+                                            <td>Students sitting/waiting at start of class</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sequential developmental curriculum</td>
+                                            <td>One-size-fits-all lessons across grade levels</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Positive, emotionally & physically safe environment</td>
+                                            <td>Activities that single children out or put them "on display"</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Maximum participation (50%+ in MVPA)</td>
+                                            <td>Long lines, elimination games, excessive waiting</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Differentiated instruction for all learners</td>
+                                            <td>Same task for everyone regardless of ability</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Formative & summative assessment</td>
+                                            <td>No assessment or only fitness testing for grades</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefits -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('qpe-benefits')">
+                        <h3 class="font-semibold text-gray-800">🌟 Benefits of Quality PE</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-qpe-benefits" class="collapsible-content">
+                        <div class="p-4">
+                            <div class="grid md:grid-cols-2 gap-3">
+                                <div class="bg-green-50 p-3 rounded border-l-2 border-green-500 text-sm">✓ Skill development for safe, successful participation</div>
+                                <div class="bg-green-50 p-3 rounded border-l-2 border-green-500 text-sm">✓ Regular healthful physical activity</div>
+                                <div class="bg-green-50 p-3 rounded border-l-2 border-green-500 text-sm">✓ Improved physical fitness</div>
+                                <div class="bg-green-50 p-3 rounded border-l-2 border-green-500 text-sm">✓ Self-discipline & responsibility</div>
+                                <div class="bg-green-50 p-3 rounded border-l-2 border-green-500 text-sm">✓ Improved judgment & moral development</div>
+                                <div class="bg-green-50 p-3 rounded border-l-2 border-green-500 text-sm">✓ Stress reduction</div>
+                                <div class="bg-green-50 p-3 rounded border-l-2 border-green-500 text-sm">✓ Strengthened peer relations</div>
+                                <div class="bg-green-50 p-3 rounded border-l-2 border-green-500 text-sm">✓ Improved self-confidence & self-esteem</div>
+                                <div class="bg-green-50 p-3 rounded border-l-2 border-green-500 text-sm">✓ Goal-setting skills</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ CHAPTER 2 TAB ============ -->
+            <div id="tab-chapter2" class="tab-content hidden space-y-4">
+                <div class="bg-gradient-to-r from-red-500 to-pink-600 text-white p-4 rounded-lg">
+                    <h2 class="text-xl font-bold">Chapter 2: The Healthy Child</h2>
+                </div>
+
+                <!-- PA Guidelines -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('pa-guidelines')">
+                        <h3 class="font-semibold text-gray-800">📊 Physical Activity Guidelines</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-pa-guidelines" class="collapsible-content active">
+                        <div class="p-4">
+                            <div class="bg-red-50 p-4 rounded border-l-4 border-red-500">
+                                <p class="font-bold text-lg mb-3">Children ages 6-17 need 60+ minutes daily of physical activity:</p>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-red-600 font-bold">→</span>
+                                        <span>Most time in moderate-to-vigorous aerobic activity</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-red-600 font-bold">→</span>
+                                        <span>Vigorous activity at least 3 days/week</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-red-600 font-bold">→</span>
+                                        <span>Muscle-strengthening activity at least 3 days/week</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-red-600 font-bold">→</span>
+                                        <span>Bone-strengthening activity at least 3 days/week</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HRF Components -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('hrf-components')">
+                        <h3 class="font-semibold text-gray-800">💪 Health-Related Fitness Components</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-hrf-components" class="collapsible-content">
+                        <div class="p-4">
+                            <div class="overflow-x-auto">
+                                <table class="text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Component</th>
+                                            <th>Definition</th>
+                                            <th>Teaching Implications</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Cardiorespiratory Endurance</strong></td>
+                                            <td>Ability to continue vigorous activity over time without fatigue</td>
+                                            <td>Use SHORT BURSTS (1-2 min) not long continuous activity; Max HR ~195-205 bpm</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Muscular Strength</strong></td>
+                                            <td>Ability to exert maximum force</td>
+                                            <td>Activities using BODY WEIGHT: climbing, hanging, swinging, jumping, pushing, pulling</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Muscular Endurance</strong></td>
+                                            <td>Ability to exert force for several repetitions or extended time</td>
+                                            <td>Weight-bearing activities with SEVERAL REPETITIONS (5-10 inchworms, crab walks, bear walks)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Flexibility</strong></td>
+                                            <td>Ability of joints to move through full range of motion</td>
+                                            <td>Stretch AFTER aerobic warm-up; Use static or dynamic (NOT ballistic); Model proper form</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Body Composition</strong></td>
+                                            <td>Proportion of lean mass to fat mass</td>
+                                            <td>Focus on sound nutrition + daily MVPA + muscular endurance activities</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FITT Principles -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('fitt')">
+                        <h3 class="font-semibold text-gray-800">🎯 FITT Principles (for K-2 students)</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-fitt" class="collapsible-content">
+                        <div class="p-4">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-orange-50 p-3 rounded">
+                                    <h4 class="font-bold text-orange-900 mb-2">F - Frequency</h4>
+                                    <p class="text-sm">How many days/week active</p>
+                                </div>
+                                <div class="bg-yellow-50 p-3 rounded">
+                                    <h4 class="font-bold text-yellow-900 mb-2">I - Intensity</h4>
+                                    <p class="text-sm">Heart beating faster/slower? Breathing harder? Muscles tired?</p>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded">
+                                    <h4 class="font-bold text-green-900 mb-2">T - Time</h4>
+                                    <p class="text-sm">Moving for shorter/longer periods</p>
+                                </div>
+                                <div class="bg-blue-50 p-3 rounded">
+                                    <h4 class="font-bold text-blue-900 mb-2">T - Type</h4>
+                                    <p class="text-sm">Different activities build different fitness components (Physical Activity Pyramid)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appropriate Fitness Practices -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('fitness-practices')">
+                        <h3 class="font-semibold text-gray-800">✅ Appropriate Fitness Practices</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-fitness-practices" class="collapsible-content">
+                        <div class="p-4">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-green-50 p-4 rounded">
+                                    <h4 class="font-bold text-green-900 mb-3">✅ DO:</h4>
+                                    <ul class="space-y-2 text-sm">
+                                        <li>✓ Focus on health-related fitness components</li>
+                                        <li>✓ Make fitness FUN and nonthreatening</li>
+                                        <li>✓ Keep results PRIVATE</li>
+                                        <li>✓ Use formative assessment during instruction</li>
+                                        <li>✓ Help students set personal goals</li>
+                                        <li>✓ Make fitness PROGRESSIVE over time</li>
+                                        <li>✓ Promote INTRINSIC motivation</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded">
+                                    <h4 class="font-bold text-red-900 mb-3">❌ DON'T:</h4>
+                                    <ul class="space-y-2 text-sm">
+                                        <li>✗ Random mass exercises</li>
+                                        <li>✗ Use fitness tests for grades</li>
+                                        <li>✗ Public display of results or comparisons</li>
+                                        <li>✗ Require long-distance running without conditioning</li>
+                                        <li>✗ Fitness testing without teaching form first</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ CHAPTER 3 TAB ============ -->
+            <div id="tab-chapter3" class="tab-content hidden space-y-4">
+                <div class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white p-4 rounded-lg">
+                    <h2 class="text-xl font-bold">Chapter 3: The Thinking, Feeling, and Socializing Child</h2>
+                </div>
+
+                <!-- Piaget -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('piaget')">
+                        <h3 class="font-semibold text-gray-800">🧠 Piaget's Cognitive Development Stages</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-piaget" class="collapsible-content active">
+                        <div class="p-4">
+                            <div class="overflow-x-auto">
+                                <table class="text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Stage</th>
+                                            <th>Age</th>
+                                            <th>Characteristics</th>
+                                            <th>Teaching Implications</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Sensorimotor</strong></td>
+                                            <td>Birth-2</td>
+                                            <td>Movement governed by reflexes; explores world through senses & action</td>
+                                            <td>Safe environment for crawling/climbing; action-reaction toys; positive feedback</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Preoperational</strong></td>
+                                            <td>2-7 (Pre-K–Grade 2)</td>
+                                            <td>Uses symbols, elementary logic; egocentric; vivid imagination; asks "why"</td>
+                                            <td>Simple instructions; pictures on task cards; short activities; station format; stimulate imagination</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Concrete Operational</strong></td>
+                                            <td>7-11 (Grades 2-5)</td>
+                                            <td>Logical thinking based on concrete experiences; considers others' perspectives</td>
+                                            <td>More complex directions (2-3+); longer instruction; can design/modify combinations; apply strategies</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Formal Operational</strong></td>
+                                            <td>11+ (some 4th-5th)</td>
+                                            <td>Abstract reasoning; systematic problem-solving; prediction & planning</td>
+                                            <td>Strategize during gameplay; "what if" scenarios; create complex sequences; mental imagery</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Self-Concept -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('self-concept')">
+                        <h3 class="font-semibold text-gray-800">💭 Self-Concept & Self-Esteem Development</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-self-concept" class="collapsible-content">
+                        <div class="p-4 space-y-4">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <h4 class="font-bold text-purple-900 mb-2">Self-Concept Definition:</h4>
+                                <p class="text-sm mb-3">Accumulation of knowledge about oneself (beliefs about traits, characteristics, abilities)</p>
+                                <div class="grid md:grid-cols-2 gap-3 text-sm">
+                                    <div class="bg-white p-3 rounded">
+                                        <p class="font-semibold mb-1">Early Childhood:</p>
+                                        <p>Concrete - "I am tall!" "I have a dog!" "I play piano!"</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded">
+                                        <p class="font-semibold mb-1">Later Childhood:</p>
+                                        <p>Abstract - "I am a happy person!" (influenced by peers)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-green-50 p-4 rounded border-l-4 border-green-500">
+                                <h4 class="font-bold text-green-900 mb-2">Teachers Foster Positive Self-Concept By:</h4>
+                                <ul class="space-y-2 text-sm">
+                                    <li>✓ Age-appropriate rules with consistent consequences (safety/security)</li>
+                                    <li>✓ Being supportive and encouraging (appreciation/respect)</li>
+                                    <li>✓ Providing inclusive environments where each child succeeds at their level (competence)</li>
+                                    <li>✓ Adequate practice time (learning/competence)</li>
+                                    <li>✓ Providing choice and decision-making (confidence/self-evaluation)</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-yellow-50 p-4 rounded border-l-4 border-yellow-500">
+                                <h4 class="font-bold text-yellow-900 mb-2">Perceived Competence:</h4>
+                                <p class="text-sm">Understanding that one's EFFORT makes the difference in achieving goals</p>
+                                <p class="text-xs mt-2 italic">Develops through criterion-referenced goals, NOT social comparison only</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Erikson -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('erikson')">
+                        <h3 class="font-semibold text-gray-800">👥 Erikson's Psychosocial Development</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-erikson" class="collapsible-content">
+                        <div class="p-4">
+                            <div class="overflow-x-auto">
+                                <table class="text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Stage</th>
+                                            <th>Age</th>
+                                            <th>Crisis</th>
+                                            <th>PE Connection</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Initiative vs. Guilt</strong></td>
+                                            <td>3-6 (Pre-K)</td>
+                                            <td>Taking risks, exploring</td>
+                                            <td>Opportunities to move, explore, succeed = confidence; Criticism/limits = guilt and withdrawal</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Industry vs. Inferiority</strong></td>
+                                            <td>6-12 (K-5)</td>
+                                            <td>Producing, learning skills</td>
+                                            <td>Criterion-referenced goals using personal data = industry; Excessive comparison = inferiority</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TPSR -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('tpsr')">
+                        <h3 class="font-semibold text-gray-800">🎯 Hellison's TPSR Levels</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-tpsr" class="collapsible-content">
+                        <div class="p-4">
+                            <div class="overflow-x-auto">
+                                <table class="text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Level</th>
+                                            <th>Focus</th>
+                                            <th>Teaching Strategies</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong class="text-red-600">Level 0: Irresponsibility</strong></td>
+                                            <td>Blaming others, denying responsibility</td>
+                                            <td>Address through levels 1-4</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong class="text-orange-600">Level 1: Respect</strong></td>
+                                            <td>Self-control; respecting rights/feelings of others</td>
+                                            <td>Inclusive environments; conflict resolution; self-officiating</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong class="text-yellow-600">Level 2: Participation</strong></td>
+                                            <td>Effort and cooperation</td>
+                                            <td>Limited choice in tasks; redefining success; cooperation activities</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong class="text-green-600">Level 3: Self-Direction</strong></td>
+                                            <td>Working independently without supervision</td>
+                                            <td>Goal-setting; independent work at stations; personal plans</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong class="text-blue-600">Level 4: Caring/Leadership</strong></td>
+                                            <td>Helping others; showing concern</td>
+                                            <td>Peer assessment; peer teaching; group goals; leadership roles</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="bg-indigo-50 p-3 rounded mt-3">
+                                <p class="font-semibold text-indigo-900 mb-2">Empowerment Progression:</p>
+                                <p class="text-sm text-indigo-800">Gradually shift decision-making to students: Teacher control → Limited choices → Independent work → Helping/leading others</p>
+                                <p class="text-xs text-indigo-700 mt-2 italic">Always paired with self-reflection on choices and consequences</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ CHAPTER 4 TAB ============ -->
+            <div id="tab-chapter4" class="tab-content hidden space-y-4">
+                <div class="bg-gradient-to-r from-green-500 to-teal-600 text-white p-4 rounded-lg">
+                    <h2 class="text-xl font-bold">Chapter 4: The Moving Child</h2>
+                </div>
+
+                <!-- Motor Development Phases -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('motor-phases')">
+                        <h3 class="font-semibold text-gray-800">🏃 Motor Development Phases & Stages</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-motor-phases" class="collapsible-content active">
+                        <div class="p-4">
+                            <div class="overflow-x-auto">
+                                <table class="text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Phase</th>
+                                            <th>Stage</th>
+                                            <th>Age</th>
+                                            <th>Characteristics</th>
+                                            <th>Teaching Focus</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td rowspan="3"><strong class="text-blue-600">Fundamental Movement</strong></td>
+                                            <td><strong>Initial</strong></td>
+                                            <td>~2-3</td>
+                                            <td>First attempts; uncoordinated; limited by body proportions</td>
+                                            <td>Growth + maturation; enriched play environments; exploration</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Emerging-Elementary</strong></td>
+                                            <td>~3-5</td>
+                                            <td>Transitioning; more control but still awkward</td>
+                                            <td>Scaled equipment; many practice opportunities; encouragement</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Mature</strong></td>
+                                            <td>~6-7+</td>
+                                            <td>Efficient, coordinated; full range of motion</td>
+                                            <td>Quality instruction; appropriate equipment; practice + encouragement</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="2"><strong class="text-green-600">Specialized Movement</strong></td>
+                                            <td><strong>Transition</strong></td>
+                                            <td>~7-10</td>
+                                            <td>Fundamental skills → specialized sport skills</td>
+                                            <td>Gamelike activities; skill drills; lead-up games (NOT full sports)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Application</strong></td>
+                                            <td>~11-13</td>
+                                            <td>Skill combinations in cultural activities</td>
+                                            <td>Modified games/sports; form, precision, accuracy emphasized</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motor Learning Levels -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('motor-learning')">
+                        <h3 class="font-semibold text-gray-800">📚 Motor Learning Levels (Not age-dependent!)</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-motor-learning" class="collapsible-content">
+                        <div class="p-4 space-y-3">
+                            <div class="bg-orange-50 p-4 rounded border-l-4 border-orange-500">
+                                <h4 class="font-bold text-orange-900 mb-2">🔸 Beginner Level</h4>
+                                <div class="text-sm space-y-2">
+                                    <p><strong>Characteristics:</strong> Inconsistent; uncoordinated; focuses on body placement; can't adapt to changes; can't detect own errors</p>
+                                    <p><strong>Goal:</strong> Gain greater consistency in performance</p>
+                                    <p><strong>Teacher Role:</strong> Instruction/feedback about movement pattern, goal of skill, cues in environment, skill variations</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-yellow-50 p-4 rounded border-l-4 border-yellow-500">
+                                <h4 class="font-bold text-yellow-900 mb-2">🔸 Intermediate Level</h4>
+                                <div class="text-sm space-y-2">
+                                    <p><strong>Characteristics:</strong> Greater consistency; fewer errors; less conscious attention; beginning to time/adapt; detecting some errors</p>
+                                    <p><strong>Goal:</strong> Combine skills in fluid sequences; apply skills in various activities</p>
+                                    <p><strong>Teacher Role:</strong> Refining movement; varying skills; fluidly combining; adapting to authentic, changing environment</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-green-50 p-4 rounded border-l-4 border-green-500">
+                                <h4 class="font-bold text-green-900 mb-2">🔸 Advanced Level</h4>
+                                <div class="text-sm space-y-2">
+                                    <p><strong>Characteristics:</strong> Consistent & automatic; effortless appearance; detects/corrects own errors; adapts & anticipates</p>
+                                    <p><strong>Goal:</strong> Achieve consistent & automatic performance in cultural activities</p>
+                                    <p><strong>Teacher Role:</strong> Simultaneous performance of multiple skills; strategic decision-making; error detection prompts</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-blue-50 p-4 rounded border border-blue-300">
+                                <p class="font-semibold text-blue-900 mb-2">💡 Important Connection:</p>
+                                <p class="text-sm text-blue-800">A child in the <strong>mature stage</strong> of development can still be a <strong>beginner learner</strong> when first attempting a new skill!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Perceptual-Motor -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('perceptual-motor')">
+                        <h3 class="font-semibold text-gray-800">👁️ Perceptual-Motor Development</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-perceptual-motor" class="collapsible-content">
+                        <div class="p-4 space-y-4">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <h4 class="font-bold text-purple-900 mb-3">Visual Perception (affects performance until ~age 12-18):</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="bg-white p-2 rounded">
+                                        <strong>Visual acuity:</strong> Not fully developed until age 10-12; young children are farsighted
+                                    </div>
+                                    <div class="bg-white p-2 rounded">
+                                        <strong>Figure-ground:</strong> Distinguishing object from background (improves age 4-8) → <em>Use bright, contrasting colors</em>
+                                    </div>
+                                    <div class="bg-white p-2 rounded">
+                                        <strong>Motion perception:</strong> Tracking moving objects (horizontal by 5-6; arc by 8-9) → <em>Moderate speeds work best</em>
+                                    </div>
+                                    <div class="bg-white p-2 rounded">
+                                        <strong>Depth perception:</strong> Detecting distance (matures in teens) → <em>Consider ball color, size, speed, trajectory</em>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-pink-50 p-4 rounded">
+                                <h4 class="font-bold text-pink-900 mb-3">Kinesthetic Perception:</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="bg-white p-2 rounded">
+                                        <strong>Body awareness:</strong> Recognizing body parts/relationships (most parts ID'd by age 6)
+                                    </div>
+                                    <div class="bg-white p-2 rounded">
+                                        <strong>Laterality:</strong> Spatial concepts relative to own body; left/right develops age 4-6, mastered by age 10
+                                    </div>
+                                    <div class="bg-white p-2 rounded">
+                                        <strong>Directionality:</strong> Spatial concepts about objects in environment (develops age 6-12)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schema Theory -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('schema-theory')">
+                        <h3 class="font-semibold text-gray-800">🧩 Schema Theory (How Skills Are Learned)</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-schema-theory" class="collapsible-content">
+                        <div class="p-4">
+                            <div class="bg-teal-50 p-4 rounded border-l-4 border-teal-500">
+                                <h4 class="font-bold text-teal-900 mb-3">Generalized Motor Program (GMP):</h4>
+                                <p class="text-sm mb-3">Set of rules for performing a skill</p>
+                                <div class="grid md:grid-cols-2 gap-3 text-sm">
+                                    <div class="bg-white p-3 rounded">
+                                        <p class="font-semibold text-teal-900 mb-1">Stable Features:</p>
+                                        <p>Unchanging sequence of movements (defines the skill)</p>
+                                        <p class="text-xs italic mt-2">Example: Step with opposite foot when throwing</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded">
+                                        <p class="font-semibold text-teal-900 mb-1">Flexible Features:</p>
+                                        <p>Vary based on distance, direction, speed, force (defines execution)</p>
+                                        <p class="text-xs italic mt-2">Example: Throwing to different distances/targets</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 grid md:grid-cols-2 gap-3">
+                                    <div class="bg-blue-100 p-3 rounded text-sm">
+                                        <p class="font-semibold mb-1">Explicit Learning:</p>
+                                        <p>Conscious awareness (instruction, demonstrations, feedback)</p>
+                                    </div>
+                                    <div class="bg-green-100 p-3 rounded text-sm">
+                                        <p class="font-semibold mb-1">Implicit Learning:</p>
+                                        <p>Unconscious learning through play/exploration</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Affordances -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-colors" onclick="toggleSection('affordances')">
+                        <h3 class="font-semibold text-gray-800">🎨 Affordances</h3>
+                        <svg class="chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div id="section-affordances" class="collapsible-content">
+                        <div class="p-4">
+                            <div class="bg-indigo-50 p-4 rounded border-l-4 border-indigo-500">
+                                <p class="font-semibold text-indigo-900 mb-2">Definition:</p>
+                                <p class="text-sm mb-3">Flexible features of task/environment that teachers manipulate to fit learner's size and developmental capabilities</p>
+                                <div class="bg-white p-3 rounded">
+                                    <p class="font-semibold text-indigo-900 mb-2">Examples:</p>
+                                    <ul class="text-sm space-y-1">
+                                        <li>• Ball sized to fit child's hand</li>
+                                        <li>• Lower/closer target</li>
+                                        <li>• Slower-moving object</li>
+                                        <li>• Shorter distance</li>
+                                        <li>• Lighter equipment</li>
+                                        <li>• Modified rules</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-6 text-center text-sm text-gray-600">
+            <p>💡 Tip: Use the browser console to add sticky notes as you work!</p>
+            <p class="mt-2">Keep this guide open while working on your Meaningful PE Analysis ✨</p>
+        </div>
+    </div>
+
+    <!-- Notes Panel (Sidebar) -->
+    <div id="notesPanel" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 no-print">
+        <div class="h-full flex flex-col">
+            <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 flex items-center justify-between">
+                <div class="flex items-center gap-2 text-white">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                        <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                    </svg>
+                    <div>
+                        <h3 class="font-bold text-lg">My Sticky Notes</h3>
+                        <p class="text-xs opacity-90"><span id="totalNotes">0</span> total notes</p>
+                    </div>
+                </div>
+                <button onclick="toggleNotesPanel()" class="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded transition-colors">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div id="notesContent" class="flex-1 overflow-y-auto p-4">
+                <div class="text-center py-12 text-gray-400">
+                    <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" class="mx-auto mb-3 opacity-50">
+                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                        <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                    </svg>
+                    <p class="text-sm">No notes yet!</p>
+                    <p class="text-xs mt-1">Use the console to add notes</p>
+                </div>
+            </div>
+            <div class="border-t p-4 bg-gray-50">
+                <button onclick="clearAllNotes()" class="w-full px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 text-sm font-medium transition-colors">
+                    Clear All Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-30 z-40 hidden no-print" onclick="toggleNotesPanel()"></div>
+
+    <script>
+        // Initialize
+        let notes = JSON.parse(localStorage.getItem('peNotes') || '[]');
+        updateNotesDisplay();
+
+        // Tab Switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'border-b-4', 'border-indigo-800');
+                btn.classList.add('bg-gray-50', 'text-gray-700', 'hover:bg-gray-100');
+            });
+            document.querySelector('[data-tab="' + tabName + '"]').classList.remove('bg-gray-50', 'text-gray-700', 'hover:bg-gray-100');
+            document.querySelector('[data-tab="' + tabName + '"]').classList.add('bg-indigo-600', 'text-white', 'border-b-4', 'border-indigo-800');
+        }
+
+        // Section Toggle
+        function toggleSection(sectionId) {
+            const section = document.getElementById('section-' + sectionId);
+            section.classList.toggle('active');
+        }
+
+        // Notes Panel
+        function toggleNotesPanel() {
+            const panel = document.getElementById('notesPanel');
+            const overlay = document.getElementById('overlay');
+            const isOpen = !panel.classList.contains('translate-x-full');
+            
+            if (isOpen) {
+                panel.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                panel.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        // Update Notes Display
+        function updateNotesDisplay() {
+            const count = notes.length;
+            document.getElementById('totalNotes').textContent = count;
+            const badge = document.getElementById('notesCount');
+            if (count > 0) {
+                badge.textContent = count;
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            const content = document.getElementById('notesContent');
+            if (count === 0) {
+                content.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" class="mx-auto mb-3 opacity-50">
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                        </svg>
+                        <p class="text-sm">No notes yet!</p>
+                        <p class="text-xs mt-1">Use the console to add notes:<br><code>addNote("Section", "Note", "pink")</code></p>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = notes.map((note, idx) => `
+                    <div class="sticky-note bg-${note.color}-100 border-2 border-${note.color}-300 rounded-lg p-3 mb-3">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-semibold text-${note.color}-900">${note.section}</span>
+                            <button onclick="deleteNote(${idx})" class="text-${note.color}-700 hover:text-${note.color}-900">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-sm text-${note.color}-900">${note.content}</p>
+                        <p class="text-xs text-gray-500 mt-2">${new Date(note.created).toLocaleDateString()}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Add Note
+        function addNote(section, content, color = 'yellow') {
+            notes.push({
+                section: section,
+                content: content,
+                color: color,
+                created: new Date().toISOString()
+            });
+            localStorage.setItem('peNotes', JSON.stringify(notes));
+            updateNotesDisplay();
+            console.log('✅ Note added! Open "My Notes" to see it.');
+        }
+
+        // Delete Note
+        function deleteNote(index) {
+            if (confirm('Delete this note?')) {
+                notes.splice(index, 1);
+                localStorage.setItem('peNotes', JSON.stringify(notes));
+                updateNotesDisplay();
+            }
+        }
+
+        // Clear All Notes
+        function clearAllNotes() {
+            if (confirm('Are you sure you want to delete ALL notes? This cannot be undone.')) {
+                notes = [];
+                localStorage.setItem('peNotes', JSON.stringify(notes));
+                updateNotesDisplay();
+            }
+        }
+
+        // Search
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const results = document.getElementById('searchResults');
+            
+            if (query.length < 2) {
+                results.classList.add('hidden');
+                return;
+            }
+
+            let foundResults = [];
+            if (query.includes('motor') || query.includes('skill') || query.includes('movement')) {
+                foundResults.push({tab: 'chapter4', text: 'Motor Development Stages & Motor Learning Levels'});
+            }
+            if (query.includes('fitness') || query.includes('health') || query.includes('fitt') || query.includes('pacer')) {
+                foundResults.push({tab: 'chapter2', text: 'Health-Related Fitness & FITT Principles'});
+            }
+            if (query.includes('piaget') || query.includes('cognitive') || query.includes('preoperational') || query.includes('concrete')) {
+                foundResults.push({tab: 'chapter3', text: 'Piaget Cognitive Development Stages'});
+            }
+            if (query.includes('tpsr') || query.includes('hellison') || query.includes('social') || query.includes('responsibility')) {
+                foundResults.push({tab: 'chapter3', text: 'TPSR Levels & Social Development'});
+            }
+            if (query.includes('erikson') || query.includes('self-concept') || query.includes('esteem')) {
+                foundResults.push({tab: 'chapter3', text: 'Self-Concept & Erikson Stages'});
+            }
+            if (query.includes('appropriate') || query.includes('qpe') || query.includes('quality')) {
+                foundResults.push({tab: 'chapter1', text: 'Quality PE & Appropriate Practices'});
+            }
+            if (query.includes('affordance') || query.includes('equipment')) {
+                foundResults.push({tab: 'chapter4', text: 'Affordances & Equipment Modifications'});
+            }
+
+            if (foundResults.length > 0) {
+                results.innerHTML = `
+                    <div class="p-3 bg-yellow-50 rounded border border-yellow-200">
+                        <p class="text-sm font-semibold text-yellow-900 mb-2">Found ${foundResults.length} result(s):</p>
+                        ${foundResults.map(r => `
+                            <button onclick="switchTab('${r.tab}')" class="block w-full text-left text-sm text-yellow-800 hover:text-yellow-900 hover:underline mb-1">
+                                → ${r.text} (Click to jump)
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                results.classList.remove('hidden');
+            } else {
+                results.innerHTML = `
+                    <div class="p-3 bg-gray-50 rounded border border-gray-200">
+                        <p class="text-sm text-gray-600">No results found. Try: motor, fitness, piaget, tpsr, affordances</p>
+                    </div>
+                `;
+                results.classList.remove('hidden');
+            }
+        }
+
+        // Console help message
+        console.log('%c📝 Sticky Notes Feature', 'font-size: 16px; font-weight: bold; color: #f59e0b;');
+        console.log('%cAdd notes as you work:', 'font-size: 14px; color: #6366f1;');
+        console.log('addNote("Section Name", "Your note here", "pink")');
+        console.log('\nAvailable colors: yellow, pink, blue, green, purple');
+        console.log('\nExample:');
+        console.log('addNote("Motor Competence", "Remember to cite Ch. 4, p. 42 about emerging-elementary stage!", "pink")');
+    </script>
+</body>
+</html>
